@@ -1,3 +1,6 @@
 rest-store
 
-.idea/*
+.idea/misc.xml
+.idea/modules.xml
+.idea/rest-store.iml
+.idea/workspace.iml
