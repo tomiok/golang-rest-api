@@ -24,17 +24,17 @@ func main() {
 }
 
 func getBySerial(writer http.ResponseWriter, request *http.Request) {
+	writer.WriteHeader(http.StatusOK)
 	serial := mux.Vars(request)["serial"]
 
-	i,_ := strconv.Atoi(serial)
+	i, _ := strconv.Atoi(serial)
 	c, _ := model.SearchBySerial(int64(i))
 
 	_ = json.NewEncoder(writer).Encode(c)
 }
 
 func getAll(writer http.ResponseWriter, request *http.Request) {
-	writer.WriteHeader(200)
-
+	writer.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(writer).Encode(model.GetAllComputers())
 }
 
@@ -43,6 +43,6 @@ func addComputerHandler(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadAll(r.Body)
 	_ = json.Unmarshal(body, &pc)
 	model.Computers = append(model.Computers, pc)
-	w.WriteHeader(201)
+	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(pc)
 }
