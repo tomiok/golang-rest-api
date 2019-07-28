@@ -7,17 +7,29 @@ import (
 	"log"
 	"net/http"
 	"rest-store/model"
+	"strconv"
 )
+
+const port = ":8080"
 
 func main() {
 
 	log.Print("From log")
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/computers", addComputerHandler).Methods("POST")
-	router.HandleFunc("/computers", getAll).Methods("GET")
-	//router.HandleFunc("/computers/{serial}", getBySerial).Methods("GET")
+	router.HandleFunc("/computers", addComputerHandler).Methods(http.MethodPost)
+	router.HandleFunc("/computers", getAll).Methods(http.MethodGet)
+	router.HandleFunc("/computers/{serial}", getBySerial).Methods(http.MethodGet)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(port, router))
+}
+
+func getBySerial(writer http.ResponseWriter, request *http.Request) {
+	serial := mux.Vars(request)["serial"]
+
+	i,_ := strconv.Atoi(serial)
+	c, _ := model.SearchBySerial(int64(i))
+
+	_ = json.NewEncoder(writer).Encode(c)
 }
 
 func getAll(writer http.ResponseWriter, request *http.Request) {

@@ -1,5 +1,7 @@
 package model
 
+import "errors"
+
 type Computer struct {
 	SerialNumber int64  `json:"serialNumber"`
 	Model        string `json:"model"`
@@ -27,4 +29,13 @@ var Computers = pcs{
 
 func GetAllComputers() []Computer {
 	return Computers
+}
+
+func SearchBySerial(serialNumber int64) (Computer, error) {
+	for i, element := range Computers {
+		if element.SerialNumber == serialNumber {
+			return Computers[i], nil
+		}
+	}
+	return Computer{}, errors.New("not in this list")
 }
