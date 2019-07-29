@@ -33,7 +33,7 @@ func getBySerial(writer http.ResponseWriter, request *http.Request) {
 	_ = json.NewEncoder(writer).Encode(c)
 }
 
-func getAll(writer http.ResponseWriter, request *http.Request) {
+func getAll(writer http.ResponseWriter, _ *http.Request) {
 	writer.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(writer).Encode(model.GetAllComputers())
 }
@@ -45,4 +45,12 @@ func addComputerHandler(w http.ResponseWriter, r *http.Request) {
 	model.Computers = append(model.Computers, pc)
 	w.WriteHeader(http.StatusCreated)
 	_ = json.NewEncoder(w).Encode(pc)
+}
+
+func update(w http.ResponseWriter, r http.Request) {
+	var pc = model.Computer{}
+	res, _ := ioutil.ReadAll(r.Body)
+	_ = json.Unmarshal(res, &pc)
+
+	model.Computer{}.
 }

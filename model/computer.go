@@ -39,3 +39,16 @@ func SearchBySerial(serialNumber int64) (Computer, error) {
 	}
 	return Computer{}, errors.New("not in this list")
 }
+
+func UpdateRam(ram string, serial int64) *Computer {
+
+	for i, comps := range Computers {
+		if comps.SerialNumber == serial {
+			computer := Computers[i]
+			computer.Ram = ram
+			return &computer
+		}
+	}
+
+	return nil
+}
