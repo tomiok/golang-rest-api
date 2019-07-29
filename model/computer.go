@@ -44,9 +44,11 @@ func UpdateRam(ram string, serial int64) *Computer {
 
 	for i, comps := range Computers {
 		if comps.SerialNumber == serial {
+
 			computer := Computers[i]
 			computer.Ram = ram
-			return &computer
+			p := append(Computers[:i], computer)
+			return &p[i]
 		}
 	}
 

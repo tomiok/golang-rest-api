@@ -19,6 +19,7 @@ func main() {
 	router.HandleFunc("/computers", addComputerHandler).Methods(http.MethodPost)
 	router.HandleFunc("/computers", getAll).Methods(http.MethodGet)
 	router.HandleFunc("/computers/{serial}", getBySerial).Methods(http.MethodGet)
+	router.HandleFunc("/computers/{serial}", update).Methods(http.MethodPatch)
 
 	log.Fatal(http.ListenAndServe(port, router))
 }
@@ -47,10 +48,15 @@ func addComputerHandler(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(pc)
 }
 
-func update(w http.ResponseWriter, r http.Request) {
+func update(w http.ResponseWriter, r *http.Request) {
+	serialNumber := mux.Vars(r)["serial"]
+	serialStr, _ := strconv.Atoi(serialNumber)
+
 	var pc = model.Computer{}
 	res, _ := ioutil.ReadAll(r.Body)
 	_ = json.Unmarshal(res, &pc)
 
-	model.Computer{}.
+	updated := model.UpdateRam(pc.Ram, int64(serialStr))
+
+	_ = json.NewEncoder(w).Encode(updated)
 }
